@@ -22,7 +22,10 @@ namespace Socket_Chating
 
             serverSocket.BeginAccept(acceptHandle, null);
         }
-        
-        private void HandleClientConnectionRequest(IAsyncResult ar){ }
+
+        private void HandleClientConnectionRequest(IAsyncResult ar)
+        {
+            Socket clientSocket = serverSocket.EndAccept(ar);
+        }
     }
 }

@@ -86,4 +86,38 @@ public delegate void AsyncCallback(IAsyncResult ar);
 
 아무튼 BeginAccept 메소드를 통해 해당 콜백 메소드를 넘겨주고, 연결 요청을 처리하는 메소드를 AsyncCallback의 형태로 넘겨주면 되는 것이다. 해당 콜백 함수를 우리가 작성해야하는지는 아직 공부를 하지 않았다. 근데 지금 공부해보니까 우리가 작성해야한다. 아이고야.  
 
-순서대로 정리해보면, 소켓을 생성해준 뒤 -> Bind -> Listen -> BiginAccept의 과정으로 시작한다. 이 다음부턴 연결 요청이 들어온 후 이다.
+순서대로 정리해보면, 소켓을 생성해준 뒤 -> Bind -> Listen -> BiginAccept의 과정으로 시작한다. 이 다음부턴 연결 요청이 들어온 후 이다. 여기까지가 시작 부분이라고 보며 될 것 같다.
+
+---  
+
+이제부터는 데이터를 수신할 차례이다. EndAccept와 BeginReceive 메소드를 이용할 것이다.  
+EndAccept 메소드는 다음과 같은 형태를 가지고있다.  
+
+```csharp
+public System.Net.Sockets.Socket EndAccept (out byte[] buffer, out int bytesTransferred, IAsyncResult asyncResult);
+```  
+
+연결 요청을 스레딩을 통해 비동기로 처리하고, 통신을 처리할 새로운 객체를 반환한다. 우리가 쓸 때는 IAsyncResult 객체만 넘겨줄거다. 왜냐? 그걸 설명하는건 그다지 sexy하지 않군요.  
+
+```csharp
+private void someAsyncAcceptHandlerProc(IAsyncResult ar) {
+    Socket sockClient = sockServer.EndAccept(ar);
+}
+```  
+
+다음과 같은 형태로 이용한다고 한다. 클라이언트 소켓 객체를 처리할 때 쓰면 되는 것 같다. 연결 요청을 '받아서' 처리하는 애니까, 당연히 연결요청이 들어온 후 실행되야겠죠. 그러니까 말하자면, 위에서 이야기했던 AsyncCallback 에서 실행시키면 된다 대충 이렇게 이해하면 될 것 같아요.  
+
+이번에 알아볼 것은 BeginReceive 메소드이다. BeginAccept처럼 비동기식 스레드를 하나 파서 소켓에서 받고있는 데이터를 받아온다. 매개변수가 좀 많다. 메소드의 원형을 보며 알아보도록 하자.  
+
+```csharp
+public IAsyncResult BeginReceive (
+    byte[] buffer, 
+    int offset, 
+    int size, 
+    System.Net.Sockets.SocketFlags socketFlags, 
+    AsyncCallback callback, 
+    object state);
+```  
+
+매개변수가 너무 많아 엔터로 구분을 좀 했다.  
+순서대로 바이트 배열, 바이트 배열의 n번째 인덱스부터 받을건지, 수신받을 자료의 크기, 소켓 옵션, 수신하면 호출되는 비동기 대리자, 즉 콜백 델리게이트를 넣어주면 되겠다.
