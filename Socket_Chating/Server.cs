@@ -6,8 +6,17 @@ namespace Socket_Chating
 {
     class Server
     {
+        class AsyncObject{
+            public Byte[] buffer;
+            public Socket workingSocket;
+            public AsyncObject(int size){
+                buffer = new Byte[size];
+            }
+        }
+        
         private Socket serverSocket = null; // server에서 쓸 소켓이다.
         private AsyncCallback acceptHandle = new AsyncCallback(HandleClientConnectionRequest);
+        private AsyncCallback receiveHandler = new AsyncCallback(HandleDataReceive);
 
         private const int port = 6974;
         private const int backlog = 4;
@@ -26,6 +35,16 @@ namespace Socket_Chating
         private void HandleClientConnectionRequest(IAsyncResult ar)
         {
             Socket clientSocket = serverSocket.EndAccept(ar);
+            AsyncObject asyncObject = new AsyncObject(2048);
+            asyncObject.workingSocket = clientSocket;
+
+            clientSocket.BeginReceive(asyncObject.buffer, 0, asyncObject.buffer.Length, SocketFlags.None,
+                receiveHandler, asyncObject);
+        }
+
+        private void HandleDataReceive(IAsyncResult ar)
+        {
+            
         }
     }
 }
