@@ -7,42 +7,49 @@ namespace Socket_Chating
     class Server
     {
         class AsyncObject{
-            public Byte[] buffer;
-            public Socket workingSocket;
+            public byte[] Buffer;
+            public Socket WorkingSocket;
             public AsyncObject(int size){
-                buffer = new Byte[size];
+                Buffer = new byte[size];
             }
         }
         
-        private Socket serverSocket = null; // server에서 쓸 소켓이다.
-        private AsyncCallback acceptHandle = new AsyncCallback(HandleClientConnectionRequest);
-        private AsyncCallback receiveHandler = new AsyncCallback(HandleDataReceive);
+        private static Socket _serverSocket = null; // server에서 쓸 소켓이다.
+        private static AsyncCallback _acceptHandle = new AsyncCallback(HandleClientConnectionRequest);
+        private static AsyncCallback _receiveHandler = new AsyncCallback(HandleDataReceive);
 
-        private const int port = 6974;
-        private const int backlog = 4;
+        private const int Port = 6974;
+        private const int Backlog = 4;
 
         public void StartServer()
         {
-            serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.IP);
-            
-            serverSocket.Bind(new IPEndPoint(IPAddress.Any, port));
-            
-            serverSocket.Listen(backlog);
-
-            serverSocket.BeginAccept(acceptHandle, null);
+            _serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.IP);
+            _serverSocket.Bind(new IPEndPoint(IPAddress.Any, Port));
+            _serverSocket.Listen(Backlog);
+            _serverSocket.BeginAccept(_acceptHandle, null);
         }
 
-        private void HandleClientConnectionRequest(IAsyncResult ar)
+        public IAsyncResult TryAccept()
         {
-            Socket clientSocket = serverSocket.EndAccept(ar);
-            AsyncObject asyncObject = new AsyncObject(2048);
-            asyncObject.workingSocket = clientSocket;
-
-            clientSocket.BeginReceive(asyncObject.buffer, 0, asyncObject.buffer.Length, SocketFlags.None,
-                receiveHandler, asyncObject);
+            return _serverSocket.BeginAccept(_acceptHandle, null);
         }
 
-        private void HandleDataReceive(IAsyncResult ar)
+        private static void HandleClientConnectionRequest(IAsyncResult ar)
+        {
+            Socket clientSocket = _serverSocket.EndAccept(ar);
+            AsyncObject asyncObject = new AsyncObject(2048);
+            asyncObject.WorkingSocket = clientSocket;
+
+            clientSocket.BeginReceive(
+                asyncObject.Buffer, 
+                0, 
+                asyncObject.Buffer.Length, 
+                SocketFlags.None,
+                _receiveHandler, 
+                asyncObject);
+        }
+
+        private static void HandleDataReceive(IAsyncResult ar)
         {
             
         }

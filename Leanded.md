@@ -141,3 +141,13 @@ public class AsyncObject{
 ```  
 
 1번째 매개변수인 바이트 배열에 해당 클래스 객체를 만들고 객체에 있는 바이트 배열을 넘겨줄 생각이다.  
+덕분에 BeginReceive 메소드를 적절하게 써서 코드를 짜줬다.  
+이제, EndReceive. 데이터를 수신받을 차례다. 이 역시 '비동기적' 으로 처리한다.
+
+```csharp
+public int EndReceive (IAsyncResult asyncResult);
+```
+
+위와 같은 형태를 가지고 있다. 역시 매개변수로 콜백 메소드를 넘겨준다. 반환값이 int인 이유? 수신받은 자료의 바이트 수를 반환한다. 즉, 반환값이 0 이상이면 데이터가 있다는 뜻이겠지.  
+
+우리는 BeginReceive에 넘겨준 콜백 메소드에서 해당 메소드, 즉 EndReceive를 호출할 예정이다. int값으로 받고나서 값이 0 이상이라면 데이터를 잘 처리해주면 되고, 그런 후에 다시 BeginReceive를 통해 데이터를 받기 시작하면 될것이다.
