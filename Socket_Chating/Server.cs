@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Net.Sockets;
+using System.Text;
 
 namespace Socket_Chating
 {
@@ -17,6 +18,7 @@ namespace Socket_Chating
         private static Socket _serverSocket = null; // server에서 쓸 소켓이다.
         private static AsyncCallback _acceptHandle = new AsyncCallback(HandleClientConnectionRequest);
         private static AsyncCallback _receiveHandler = new AsyncCallback(HandleDataReceive);
+        private static AsyncCallback _sendHandler = new AsyncCallback(HandleDataSend);
 
         private const int Port = 6974;
         private const int Backlog = 4;
@@ -32,6 +34,18 @@ namespace Socket_Chating
         public IAsyncResult TryAccept()
         {
             return _serverSocket.BeginAccept(_acceptHandle, null);
+        }
+
+        public void SendMessage(String msg)
+        {
+            AsyncObject ao = new AsyncObject(1);
+            ao.Buffer = Encoding.Unicode.GetBytes(msg);
+            _serverSocket.BeginSend(
+                ao.Buffer, 
+                0, 
+                ao.Buffer.Length, 
+                SocketFlags.None, 
+                _sendHandler, ao);
         }
 
         private static void HandleClientConnectionRequest(IAsyncResult ar)
@@ -51,7 +65,28 @@ namespace Socket_Chating
 
         private static void HandleDataReceive(IAsyncResult ar)
         {
+            AsyncObject ao = (AsyncObject) ar.AsyncState;
+
+            int receiveBytes = ao.WorkingSocket.EndReceive(ar);
             
+            if (receiveBytes > 0)
+            {
+                Console.WriteLine("Received MSG : {0}",Encoding.Unicode.GetString(ao.Buffer));
+            }
+
+            ao.WorkingSocket.BeginReceive(ao.Buffer, 0, ao.Buffer.Length, SocketFlags.None, _receiveHandler, ao);
+        }
+
+        private static void HandleDataSend(IAsyncResult ar)
+        {
+            AsyncObject ao = (AsyncObject) ar.AsyncState;
+
+            int sentBytes = ao.WorkingSocket.EndReceive(ar);
+
+            if (sentBytes > 0)
+            {
+                Console.WriteLine("Sent MSG: {0}",Encoding.Unicode.GetString(ao.Buffer));
+            }
         }
     }
 }
