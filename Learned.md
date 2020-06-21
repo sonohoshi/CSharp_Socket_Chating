@@ -151,3 +151,22 @@ public int EndReceive (IAsyncResult asyncResult);
 위와 같은 형태를 가지고 있다. 역시 매개변수로 콜백 메소드를 넘겨준다. 반환값이 int인 이유? 수신받은 자료의 바이트 수를 반환한다. 즉, 반환값이 0 이상이면 데이터가 있다는 뜻이겠지.  
 
 우리는 BeginReceive에 넘겨준 콜백 메소드에서 해당 메소드, 즉 EndReceive를 호출할 예정이다. int값으로 받고나서 값이 0 이상이라면 데이터를 잘 처리해주면 되고, 그런 후에 다시 BeginReceive를 통해 데이터를 받기 시작하면 될것이다.
+
+---
+
+서버쪽 작업은 끝났다. 나는 이제부터 클라이언트 작업을 할 것이다.  
+
+| 서버 | 클라이언트 |
+| :---: | :---: |
+| 1. Bind -> Listen -> BeginAccept | 2. Connect or BeginConnect|
+| 3. Receive Request -> EndAccept -> BeginReceive | 4. Success Connect -> BeginReceive or Send/BeginSend|
+| 5. Data is not null -> EndReceive -> BeginReceive| 5. Data is not null -> EndReceive -> BeginReceive|
+
+위 표의 순서대로 서버와 클라이언트간의 통신이 진행된다.  
+
+Connect부터 시작해보자.  
+```csharp
+public void Connect (string host, int port);
+```
+
+메소드의 원형이시다. host 매개변수는 말 그대로, 서버 호스트의 이름을 넣어야 한다. 오버로딩된 형태가 많아서 우리가 지금까지 알고있던 EndPoint를 매개변수로 넘겨주거나, IP adress를 넘겨주는 방법도 있다. 나는 EndPoint를 사용할 예정이다. string을 어떤 형태로 넘기는지 아직 잘 이해가 안돼서.
