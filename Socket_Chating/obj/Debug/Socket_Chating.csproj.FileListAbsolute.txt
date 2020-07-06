@@ -1,0 +1,2 @@
+C:\Users\82108\WorkSpace\CSharp_Socket_Chating\Socket_Chating\obj\Debug\Socket_Chating.csprojAssemblyReference.cache
+C:\Users\82108\WorkSpace\CSharp_Socket_Chating\Socket_Chating\obj\Debug\Socket_Chating.csproj.CoreCompileInputs.cache

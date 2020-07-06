@@ -7,14 +7,6 @@ namespace Socket_Chating
 {
     class Server
     {
-        class AsyncObject{
-            public byte[] Buffer;
-            public Socket WorkingSocket;
-            public AsyncObject(int size){
-                Buffer = new byte[size];
-            }
-        }
-        
         private static Socket _serverSocket = null; // server에서 쓸 소켓이다.
         private static AsyncCallback _acceptHandle = new AsyncCallback(HandleClientConnectionRequest);
         private static AsyncCallback _receiveHandler = new AsyncCallback(HandleDataReceive);

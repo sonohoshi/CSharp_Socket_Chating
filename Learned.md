@@ -166,7 +166,73 @@ public int EndReceive (IAsyncResult asyncResult);
 
 Connect부터 시작해보자.  
 ```csharp
-public void Connect (string host, int port);
+public void Connect(string host, int port);
 ```
 
-메소드의 원형이시다. host 매개변수는 말 그대로, 서버 호스트의 이름을 넣어야 한다. 오버로딩된 형태가 많아서 우리가 지금까지 알고있던 EndPoint를 매개변수로 넘겨주거나, IP adress를 넘겨주는 방법도 있다. 나는 EndPoint를 사용할 예정이다. string을 어떤 형태로 넘기는지 아직 잘 이해가 안돼서.
+메소드의 원형이시다. host 매개변수는 말 그대로, 서버 호스트의 이름을 넣어야 한다. 오버로딩된 형태가 많아서 우리가 지금까지 알고있던 EndPoint를 매개변수로 넘겨주거나, IP adress를 넘겨주는 방법도 있다. 나는 EndPoint를 사용할 예정이다. string을 어떤 형태로 넘기는지 아직 잘 이해가 안돼서. 
+
+```csharp
+// .Connect throws an exception if unsuccessful
+client.Connect(anEndPoint);
+
+// This is how you can determine whether a socket is still connected.
+bool blockingState = client.Blocking;
+try
+{
+    byte [] tmp = new byte[1];
+
+    client.Blocking = false;
+    client.Send(tmp, 0, 0);
+    Console.WriteLine("Connected!");
+}
+catch (SocketException e)
+{
+    // 10035 == WSAEWOULDBLOCK
+    if (e.NativeErrorCode.Equals(10035))
+    {
+        Console.WriteLine("Still Connected, but the Send would block");
+    }
+    else
+    {
+        Console.WriteLine("Disconnected: error code {0}!", e.NativeErrorCode);
+    }
+}
+finally
+{
+    client.Blocking = blockingState;
+}
+
+Console.WriteLine("Connected: {0}", client.Connected);
+```
+
+위 코드는 MSDN의 Socket.Connect 문서에서 EndPoint를 이용하는 예제를 긁어온 것이다.  
+
+근데 생각해보니 클라이언트가 서버 EndPoint를 어떻게 가지고 있지? 일단 그냥 IPAddress.any로 돌려보고 되나 안되나 해보면 되겠지 뭐.  
+
+어쨌거나, 서버 접속은 서버가 켜져 있어야 할 수 있는거니까 많은 경우의 Exception이 존재한다.
+
+```csharp
+ArgumentNullException
+// host가 null인 경우
+ArgumentOutOfRangeException
+// 포트 번호가 잘못된 경우
+SocketException
+// 액세스 오류
+ObjectDisposedException
+// 소켓이 닫혀있음.
+NotSupportedException
+// 이 메서드는 InterNetwork 또는 InterNetworkV6 제품군의 소켓에 유효합니다. - MSDN, Socket.Connect 문서
+InvalidOperationException
+// 소켓이 Listen을 호출한 상태. 즉, 서버.
+```
+
+이와 같은 많은 예외가 있다. 따라서, 우리는 이 많은 Exception들을 감당할 수 없으므로 try-catch문을 써야 한다.  
+
+오랜만에 공부를 하면서 알아봤는데, 
+
+```csharp
+public void Connect(string host, int port);
+```
+
+여기서 string host는 그냥 아이피 주소를 넘겨주면 된다고 한다. string의 형태로 넘겨주면 내부적으로 변환해서 쓴다고 한다. 이 얼마나 아름다운 메소드인가? 진짜 가슴이 웅장해진다...  
+
