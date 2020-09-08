@@ -67,22 +67,31 @@ namespace Socket_Chating
             {
                 Byte[] messageBytes = new Byte[receivedBytes];
                 Array.Copy(ao.Buffer,messageBytes,receivedBytes);
-                Console.WriteLine("메세지 받음 : {0}",Encoding.UTF8.GetString(messageBytes));
+                Console.WriteLine("Received MSG : {0}",Encoding.UTF8.GetString(messageBytes));
             }
         }
 
         private static void HandleDataSend(IAsyncResult ar)
         {
             AsyncObject ao = (AsyncObject) ar.AsyncState;
-            Int32 receivedBytes;
+            Int32 sendBytes;
 
             try
             {
-                receivedBytes = ao.WorkingSocket.EndReceive(ar);
+                sendBytes = ao.WorkingSocket.EndReceive(ar);
             }
             catch (Exception e)
             {
+                Console.WriteLine("Error in Sending : {0}",e.Message);
+                return;
+            }
+
+            if (sendBytes > 0)
+            {
+                Byte[] messageBytes = new byte[sendBytes];
+                Array.Copy(ao.Buffer, messageBytes, sendBytes);
                 
+                Console.WriteLine("Sent MSG : {0}", Encoding.Unicode.GetString(messageBytes));
             }
         }
     }
