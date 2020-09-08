@@ -1,6 +1,6 @@
 ﻿using System.Net.Sockets;
 
-namespace Socket_Chating
+namespace Socket_Server
 {
     public class AsyncObject
     {

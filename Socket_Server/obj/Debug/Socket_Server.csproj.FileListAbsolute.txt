@@ -1,0 +1,6 @@
+C:\Users\82108\WorkSpace\CSharp_Socket_Chating\Socket_Server\bin\Debug\Socket_Server.exe
+C:\Users\82108\WorkSpace\CSharp_Socket_Chating\Socket_Server\bin\Debug\Socket_Server.pdb
+C:\Users\82108\WorkSpace\CSharp_Socket_Chating\Socket_Server\obj\Debug\Socket_Server.csprojAssemblyReference.cache
+C:\Users\82108\WorkSpace\CSharp_Socket_Chating\Socket_Server\obj\Debug\Socket_Server.csproj.CoreCompileInputs.cache
+C:\Users\82108\WorkSpace\CSharp_Socket_Chating\Socket_Server\obj\Debug\Socket_Server.exe
+C:\Users\82108\WorkSpace\CSharp_Socket_Chating\Socket_Server\obj\Debug\Socket_Server.pdb

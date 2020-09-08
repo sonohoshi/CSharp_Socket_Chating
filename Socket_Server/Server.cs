@@ -3,7 +3,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 
-namespace Socket_Chating
+namespace Socket_Server
 {
     class Server
     {
