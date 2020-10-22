@@ -2,6 +2,7 @@
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using Socket_AsyncObject;
 
 namespace Socket_Chating
 {

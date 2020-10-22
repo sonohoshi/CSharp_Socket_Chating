@@ -1,6 +1,6 @@
 ﻿using System.Net.Sockets;
 
-namespace Socket_Server
+namespace Socket_AsyncObject
 {
     public class AsyncObject
     {
