@@ -8,8 +8,8 @@ namespace Socket_Chating
 {
     public class Client
     {
-        private string hostAd = "";
-        private int port = 6974;
+        private string _hostAd = "";
+        private int _port = 6974;
         private Socket _client = null; // 클라이언트에서 쓸 소켓이다.
         
         private AsyncCallback receiveHandler = new AsyncCallback(HandleDataReceive);
@@ -64,12 +64,11 @@ namespace Socket_Chating
             AsyncObject ao = (AsyncObject) ar.AsyncState;
             Int32 receivedBytes = ao.WorkingSocket.EndReceive(ar);
 
-            if (receivedBytes > 0)
-            {
-                Byte[] messageBytes = new Byte[receivedBytes];
-                Array.Copy(ao.Buffer,messageBytes,receivedBytes);
-                Console.WriteLine("Received MSG : {0}",Encoding.UTF8.GetString(messageBytes));
-            }
+            if (receivedBytes <= 0) return;
+            
+            Byte[] messageBytes = new Byte[receivedBytes];
+            Array.Copy(ao.Buffer,messageBytes,receivedBytes);
+            Console.WriteLine("Received MSG : {0}",Encoding.UTF8.GetString(messageBytes));
         }
 
         private static void HandleDataSend(IAsyncResult ar)
@@ -87,13 +86,12 @@ namespace Socket_Chating
                 return;
             }
 
-            if (sendBytes > 0)
-            {
-                Byte[] messageBytes = new byte[sendBytes];
-                Array.Copy(ao.Buffer, messageBytes, sendBytes);
+            if (sendBytes <= 0) return;
+            
+            Byte[] messageBytes = new byte[sendBytes];
+            Array.Copy(ao.Buffer, messageBytes, sendBytes);
                 
-                Console.WriteLine("Sent MSG : {0}", Encoding.Unicode.GetString(messageBytes));
-            }
+            Console.WriteLine("Sent MSG : {0}", Encoding.Unicode.GetString(messageBytes));
         }
     }
 }

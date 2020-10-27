@@ -14,5 +14,6 @@ Global
 		{907C6C00-7A6B-4AE6-BFC6-A2BC0576E28A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{907C6C00-7A6B-4AE6-BFC6-A2BC0576E28A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{907C6C00-7A6B-4AE6-BFC6-A2BC0576E28A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{40D9A4CB-600B-4E2A-ABFB-C9C06AF7F943}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 	EndGlobalSection
 EndGlobal
