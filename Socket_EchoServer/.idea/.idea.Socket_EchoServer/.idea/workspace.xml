@@ -25,7 +25,6 @@
   <component name="ChangeListManager">
     <list default="true" id="ad4dbbe2-1c5a-4a82-9326-6182bc68bc87" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Socket_EchoServer/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Socket_EchoServer/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Socket_Client/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Socket_Client/Program.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Socket_EchoServer/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Socket_EchoServer/Program.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -104,7 +103,8 @@
       <updated>1603878220896</updated>
       <workItem from="1603878226897" duration="502000" />
       <workItem from="1603878796174" duration="4187000" />
-      <workItem from="1603891081226" duration="653000" />
+      <workItem from="1603891081226" duration="2261000" />
+      <workItem from="1605013837706" duration="2557000" />
     </task>
     <servers />
   </component>
